@@ -1,0 +1,16 @@
+package com.pine.chat.user.api;
+
+import com.pine.chat.user.api.dto.CreateUserDto;
+import com.pine.chat.user.api.dto.UserDto;
+import java.util.Optional;
+
+public interface UserService {
+
+  Optional<UserDto> findByUsername(String username);
+
+  boolean existsByUsername(String username);
+
+  UserDto createUser(CreateUserDto user);
+
+  Object findWithPasswordByUsername(String username);
+}
