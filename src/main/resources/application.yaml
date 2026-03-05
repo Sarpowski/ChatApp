@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+
+  application:
+    name: chat-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: secret
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  cassandra:
+    contact-points: localhost
+    port: 9042
+    keyspace-name: chat_app
+    local-datacenter: dc1
+    schema-action: create_if_not_exists
+
+  security:
+    jwt:
+      secret: "e8f1d2c4a6b9e0f7a3d5b8c1e2f4a7d9b0c3e6f8a1d4b7c9e2f5a8"
+      expiration: 86400000 # 24h
+      refresh-expiration: 0 # 0 = no expiration
