@@ -22,6 +22,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -40,6 +41,7 @@ public class AuthService {
   private final JwtService jwtService;
 
   private final HexFormat hexFormat = HexFormat.of();
+  private final UserDetailsManager userDetailsManager;
 
   @Value("${spring.security.jwt.refresh-expiration:0}")
   private long refreshExpirationMs;
@@ -73,13 +75,9 @@ public class AuthService {
   public AuthResponse login(LoginRequest request) {
     String username = normalizeUsername(request.username());
 
-    var userWithPassword = userService.findWithPasswordByUsername(username);
-
-    if (!passwordEncoder.matches(request.password(), userService.findWithPasswordByUsername(username))) {
-      throw new ResponseStatusException(UNAUTHORIZED, "invalid credentials");
-    }
-
-    return issueTokens(username);
+    UserDto user = userService.verifyCredentials(username, request.password())
+        .orElseThrow(()-> new ResponseStatusException(UNAUTHORIZED, "invalid credentials"));
+    return issueTokens(user);
   }
 
   @Transactional
@@ -98,13 +96,12 @@ public class AuthService {
       throw new ResponseStatusException(UNAUTHORIZED, "refresh token expired or revoked");
     }
 
-    // Rotate: revoke old token, issue and persist a new one.
     existing.setRevokedAt(now);
     refreshTokenRepository.save(existing);
 
-    var user = existing.getUser(); // UserEntity in auth -> not ideal
-    // If you can’t change now, keep it temporarily:
-    UserDto dto = new UserDto(user.getId(), user.getUsername(), user.getRole());
+    var userId = existing.getUserId();
+    UserDto dto = userService.findById(userId)
+        .orElseThrow(() -> new ResponseStatusException(UNAUTHORIZED, "user not found"));
     return issueTokens(dto);
   }
 
@@ -145,7 +142,7 @@ public class AuthService {
     Instant now = Instant.now();
 
     RefreshTokenEntity entity = new RefreshTokenEntity();
-    entity.setId(userId);
+    entity.setUserId(userId);
     entity.setTokenHash(sha256Hex(refreshToken));
     entity.setIssuedAt(now);
 

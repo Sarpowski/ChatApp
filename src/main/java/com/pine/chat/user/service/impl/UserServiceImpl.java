@@ -9,13 +9,18 @@ import com.pine.chat.user.repository.UserRepository;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+
 
   @Override
   public Optional<UserDto> findByUsername(String username) {
@@ -34,24 +39,37 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto createUser(CreateUserDto user) {
-
-    if (userRepository.existsByUsername(user.username())) {
-      throw new RuntimeException("User already Exists");
-    }
-
     var userEntity = UserEntity.builder()
         .username(user.username())
         .passwordHash(user.passwordHash())
         .createdAt(Instant.now())
         .role(RoleEnum.USER)
         .build();
-    userRepository.save(userEntity);
+    var savedEntity = userRepository.save(userEntity);
 
     return new UserDto(
-        UUID.randomUUID(),
-        user.username(),
-        RoleEnum.USER
+        savedEntity.getId(),
+        savedEntity.getUsername(),
+        savedEntity.getRole()
     );
+  }
+
+  @Override
+  public Optional<UserDto> verifyCredentials(String username, String password) {
+    return userRepository.findByUsername(username)
+        .filter(user -> passwordEncoder.matches(password, user.getPasswordHash()))
+        .map(user -> new UserDto(user.getId(),user.getUsername(), user.getRole()));
+
+  }
+
+  @Override
+  public Optional<UserDto> findById(UUID id) {
+    return userRepository.findById(id)
+        .map(user -> new UserDto(
+            user.getId(),
+            user.getUsername(),
+            user.getRole())
+        );
   }
 
   @Override
