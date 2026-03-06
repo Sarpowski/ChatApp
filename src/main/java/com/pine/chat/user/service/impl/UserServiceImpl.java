@@ -72,10 +72,5 @@ public class UserServiceImpl implements UserService {
         );
   }
 
-  @Override
-  public Object findWithPasswordByUsername(String username) {
-    return null;
-  }
-
 
 }

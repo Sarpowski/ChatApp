@@ -17,5 +17,5 @@ public interface UserService {
 
   Optional<UserDto> findById(UUID id);
 
-  Object findWithPasswordByUsername(String username);
+
 }

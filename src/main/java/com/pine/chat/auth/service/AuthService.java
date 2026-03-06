@@ -8,10 +8,8 @@ import com.pine.chat.auth.model.entity.RefreshTokenEntity;
 import com.pine.chat.auth.repository.RefreshTokenRepository;
 import com.pine.chat.core.security.JwtService;
 import com.pine.chat.core.security.model.JwtTokenDto;
-import com.pine.chat.core.util.model.RoleEnum;
 import com.pine.chat.user.api.UserService;
 import com.pine.chat.user.api.dto.CreateUserDto;
-import com.pine.chat.user.model.UserEntity;
 import com.pine.chat.user.api.dto.UserDto;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -41,14 +39,12 @@ public class AuthService {
   private final JwtService jwtService;
 
   private final HexFormat hexFormat = HexFormat.of();
-  private final UserDetailsManager userDetailsManager;
 
   @Value("${spring.security.jwt.refresh-expiration:0}")
   private long refreshExpirationMs;
 
   public long getRefreshCookieMaxAgeSeconds() {
     if (refreshExpirationMs <= 0) {
-      // Session cookie (deleted when browser closes)
       return -1;
     }
     return Math.max(1, refreshExpirationMs / 1000);
