@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChatRequestRepository extends JpaRepository<ChatRequestEntity, UUID> {
 
-  List<ChatRequestEntity> findByReceiverIdANdStatus(UUID recieverId, ChatRequestStatus status);
+  List<ChatRequestEntity> findByReceiverIdAndStatus(UUID recieverId, ChatRequestStatus status);
 
   boolean existsBySenderIdAndReceiverId(UUID senderId, UUID receiverId);
 
