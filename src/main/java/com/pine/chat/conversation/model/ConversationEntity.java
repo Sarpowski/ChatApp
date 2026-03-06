@@ -1,6 +1,7 @@
 package com.pine.chat.conversation.model;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,8 +29,10 @@ public class ConversationEntity {
   @GeneratedValue(strategy = GenerationType.UUID)
   UUID id;
 
+  @Column(name = "user1_id", nullable = false)
   UUID user1Id;
 
+  @Column(name = "user2_id", nullable = false)
   UUID user2Id;
 
   Instant createdAt;
