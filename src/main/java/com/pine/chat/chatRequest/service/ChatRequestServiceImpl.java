@@ -16,7 +16,6 @@ import com.pine.chat.user.api.UserService;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-import jnr.ffi.annotations.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

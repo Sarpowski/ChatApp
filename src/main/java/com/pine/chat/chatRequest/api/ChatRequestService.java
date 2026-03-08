@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface ChatRequestService {
 
-  ChatRequestDto sendRequest(UUID senderId, UUID recieverId);
+  ChatRequestDto sendRequest(UUID senderId, UUID receiverId);
 
   ChatRequestDto acceptRequest(UUID requestId, UUID currentUserId);
 

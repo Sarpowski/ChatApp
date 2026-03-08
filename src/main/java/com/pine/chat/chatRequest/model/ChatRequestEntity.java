@@ -37,7 +37,7 @@ public class ChatRequestEntity {
   @Column(name = "sender_id", nullable = false)
   UUID senderId;
 
-  @Column(name = "reciever_id", nullable = false)
+  @Column(name = "receiver_id", nullable = false)
   UUID receiverId;
 
   @Enumerated(EnumType.STRING)
