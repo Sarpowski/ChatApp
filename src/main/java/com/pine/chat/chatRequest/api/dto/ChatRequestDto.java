@@ -12,6 +12,6 @@ public record ChatRequestDto (
     UUID receiverId,
     ChatRequestStatus status,
     Instant createdAt,
-    Instant updateAt
+    Instant updatedAt
     )
 {}
