@@ -1,4 +1,4 @@
-package com.pine.chat.user.service.impl;
+package com.pine.chat.user.service;
 
 import com.pine.chat.core.util.model.RoleEnum;
 import com.pine.chat.user.api.UserService;
