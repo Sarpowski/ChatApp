@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MessagServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService {
 
   @Override
   public MessageDto sendMessage(UUID conversationId, UUID senderId, String content) {

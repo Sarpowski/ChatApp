@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record MessageDto(
-    UUID id,
+    UUID conversationId,
     UUID messageId,
     UUID senderId,
     String content,
