@@ -1,7 +1,7 @@
 package com.pine.chat.chatRequest.controller;
 
 
-import static com.pine.chat.core.util.helper.ControllerHelper.getCurrnetUserId;
+import static com.pine.chat.core.util.helper.ControllerHelper.getCurrentUserId;
 
 import com.pine.chat.chatRequest.api.ChatRequestService;
 import com.pine.chat.chatRequest.api.dto.ChatRequestDto;
@@ -28,23 +28,23 @@ public class ChatRequestController {
   ResponseEntity<ChatRequestDto> sendRequest(@RequestBody ChatRequestDto requestDto) {
 
     return ResponseEntity.ok(chatRequestService
-        .sendRequest(getCurrnetUserId(),
+        .sendRequest(getCurrentUserId(),
             requestDto.receiverId()));
   }
 
   @PostMapping("/{requestId}/accept")
   ResponseEntity<ChatRequestDto> acceptRequest(@PathVariable UUID requestId) {
-    return ResponseEntity.ok(chatRequestService.acceptRequest(requestId, getCurrnetUserId()));
+    return ResponseEntity.ok(chatRequestService.acceptRequest(requestId, getCurrentUserId()));
   }
 
   @PostMapping("/{requestId}/reject")
   ResponseEntity<ChatRequestDto> rejectRequest(@PathVariable UUID requestId) {
-    return ResponseEntity.ok(chatRequestService.rejectRequest(requestId, getCurrnetUserId()));
+    return ResponseEntity.ok(chatRequestService.rejectRequest(requestId, getCurrentUserId()));
   }
 
   @GetMapping("/pending")
   ResponseEntity<List<ChatRequestDto>> getPending() {
     return ResponseEntity.ok(chatRequestService
-        .getPendingRequestsForUser(getCurrnetUserId()));
+        .getPendingRequestsForUser(getCurrentUserId()));
   }
 }
