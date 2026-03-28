@@ -5,7 +5,7 @@ import java.awt.print.Pageable;
 import java.util.UUID;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.cassandra.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository

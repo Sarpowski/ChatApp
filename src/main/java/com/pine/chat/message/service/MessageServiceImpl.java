@@ -9,7 +9,7 @@ import com.pine.chat.message.api.dto.MessageDto;
 import com.pine.chat.message.model.ChatMessage;
 import com.pine.chat.message.model.ChatMessageKey;
 import com.pine.chat.message.repository.ChatMessageRepository;
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -56,7 +56,7 @@ public class MessageServiceImpl implements MessageService {
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "conversation not found"));
 
     return chatMessageRepository
-        .findByConversationId(conversationId, limit, (Pageable) PageRequest.of(0, limit))
+        .findByConversationId(conversationId, limit, PageRequest.of(0, limit))
         .stream()
         .map(MessageServiceImpl::toDto)
         .toList();
@@ -65,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
 
   private static MessageDto toDto(ChatMessage message) {
     return MessageDto.builder()
-        .conversationId(message.getKey().getMessageId())
+        .conversationId(message.getKey().getConversationId())
         .messageId(message.getKey().getMessageId())
         .senderId(message.getSenderId())
         .content(message.getContent())
