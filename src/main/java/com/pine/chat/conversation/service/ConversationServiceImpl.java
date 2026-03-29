@@ -65,7 +65,8 @@ public class ConversationServiceImpl implements ConversationService {
 
   @Override
   public boolean existsBetweenUsers(UUID userA, UUID userB) {
-    return conversationRepository.existsByUser1IdAndUser2Id(userA, userB);
+    UUID[] ids = normalize(userA, userB); // ✅ add this
+    return conversationRepository.existsByUser1IdAndUser2Id(ids[0], ids[1]);
   }
 
   private static UUID[] normalize(UUID a, UUID b) {

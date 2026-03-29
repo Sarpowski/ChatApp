@@ -31,7 +31,7 @@ public class ChatRequestServiceImpl implements ChatRequestService {
 
   @Override
   public ChatRequestDto sendRequest(UUID senderId, UUID receiverId) {
-    if (senderId == receiverId) {
+    if (senderId.equals(receiverId)) {
       throw new ResponseStatusException(BAD_REQUEST, "senderId and receiverId is equals");
     }
 
