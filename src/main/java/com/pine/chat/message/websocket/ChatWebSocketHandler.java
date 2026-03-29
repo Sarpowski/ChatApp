@@ -33,7 +33,11 @@ public class ChatWebSocketHandler {
     }
 
     UUID senderId = UUID.fromString(principal.getName());
-    MessageDto saved = messageService.sendMessage(conversationId, senderId, request.content());
+    MessageDto saved = messageService.sendMessage(
+        conversationId,
+        senderId,
+        request.content(),
+        request.messageId());
 
     messagingTemplate.convertAndSend(
         "/topic/conversation." + conversationId,

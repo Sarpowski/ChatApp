@@ -3,6 +3,7 @@ server:
 
 spring:
 
+
   application:
     name: chat-service
 
@@ -18,6 +19,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
 
 
   cassandra:

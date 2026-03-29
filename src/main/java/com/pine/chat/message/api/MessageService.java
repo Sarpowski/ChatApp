@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface MessageService {
 
-  MessageDto sendMessage(UUID conversationId, UUID senderId, String content);
+  MessageDto sendMessage(UUID conversationId, UUID senderId, String content, UUID clientMessageId);
 
   List<MessageDto> getMessages(UUID conversationId, int limit);
 }

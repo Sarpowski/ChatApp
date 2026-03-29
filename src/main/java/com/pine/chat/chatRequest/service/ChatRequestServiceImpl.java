@@ -8,10 +8,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.pine.chat.chatRequest.api.ChatRequestService;
 import com.pine.chat.chatRequest.api.dto.ChatRequestDto;
+import com.pine.chat.chatRequest.model.AcceptChatRequestResponse;
 import com.pine.chat.chatRequest.model.ChatRequestEntity;
 import com.pine.chat.chatRequest.model.ChatRequestStatus;
 import com.pine.chat.chatRequest.repository.ChatRequestRepository;
 import com.pine.chat.conversation.api.ConversationService;
+import com.pine.chat.conversation.api.dto.ConversationDto;
 import com.pine.chat.user.api.UserService;
 import java.time.Instant;
 import java.util.List;
@@ -59,7 +61,7 @@ public class ChatRequestServiceImpl implements ChatRequestService {
 
 
   @Override
-  public ChatRequestDto acceptRequest(UUID requestId, UUID currentUserId) {
+  public AcceptChatRequestResponse acceptRequest(UUID requestId, UUID currentUserId) {
     var entity = chatRequestRepository.findById(requestId)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "reqeust not found"));
 
@@ -71,11 +73,14 @@ public class ChatRequestServiceImpl implements ChatRequestService {
       throw new ResponseStatusException(CONFLICT, "request is no longer pending");
     }
 
+
     entity.setStatus(ChatRequestStatus.ACCEPTED);
     entity.setUpdatedAt(Instant.now());
     chatRequestRepository.save(entity);
-    conversationService.createConverstaion(entity.getSenderId(), entity.getReceiverId());
-    return toDto(entity);
+    ConversationDto conversation =
+        conversationService.createConversation(entity.getSenderId(), entity.getReceiverId());
+
+    return toDto(entity, conversation.id());
   }
 
   @Override
@@ -117,5 +122,19 @@ public class ChatRequestServiceImpl implements ChatRequestService {
     );
   }
 
+  private static AcceptChatRequestResponse toDto(
+      ChatRequestEntity entity,
+      UUID conversationId
+  ) {
+    return new AcceptChatRequestResponse(
+        entity.getId(),
+        entity.getSenderId(),
+        entity.getReceiverId(),
+        entity.getStatus(),
+        entity.getCreatedAt(),
+        entity.getUpdatedAt(),
+        conversationId
+    );
+  }
 
 }

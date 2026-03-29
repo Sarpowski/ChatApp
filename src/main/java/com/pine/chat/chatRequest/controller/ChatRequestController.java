@@ -5,6 +5,7 @@ import static com.pine.chat.core.util.helper.ControllerHelper.getCurrentUserId;
 
 import com.pine.chat.chatRequest.api.ChatRequestService;
 import com.pine.chat.chatRequest.api.dto.ChatRequestDto;
+import com.pine.chat.chatRequest.model.AcceptChatRequestResponse;
 import com.pine.chat.core.util.ApiVersion.ApiVersion;
 import java.util.List;
 import java.util.UUID;
@@ -33,7 +34,7 @@ public class ChatRequestController {
   }
 
   @PostMapping("/{requestId}/accept")
-  ResponseEntity<ChatRequestDto> acceptRequest(@PathVariable UUID requestId) {
+  ResponseEntity<AcceptChatRequestResponse> acceptRequest(@PathVariable UUID requestId) {
     return ResponseEntity.ok(chatRequestService.acceptRequest(requestId, getCurrentUserId()));
   }
 

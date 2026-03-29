@@ -24,7 +24,7 @@ public class ConversationServiceImpl implements ConversationService {
   private final UserService userService;
 
   @Override
-  public ConversationDto createConverstaion(UUID userA, UUID userB) {
+  public ConversationDto createConversation(UUID userA, UUID userB) {
 
     var chatId = normalize(userA, userB);
     userService.findById(userA)

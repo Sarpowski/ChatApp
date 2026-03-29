@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ConversationService {
 
-  ConversationDto createConverstaion(UUID userA, UUID userB);
+  ConversationDto createConversation(UUID userA, UUID userB);
 
   Optional<ConversationDto> findById(UUID conversationId);
 

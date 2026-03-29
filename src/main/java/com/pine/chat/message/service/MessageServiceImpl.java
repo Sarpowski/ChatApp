@@ -26,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
   private final ConversationService conversationService;
 
   @Override
-  public MessageDto sendMessage(UUID conversationId, UUID senderId, String content) {
+  public MessageDto sendMessage(UUID conversationId, UUID senderId, String content, UUID clientMessageId) {
     var conversation = conversationService.findById(conversationId)
         .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "conversation not found"));
     boolean isParticipant = senderId.equals(conversation.user1Id())
@@ -35,7 +35,11 @@ public class MessageServiceImpl implements MessageService {
     if (!isParticipant) {
       throw new ResponseStatusException(FORBIDDEN, "user is not a participant of this conversation");
     }
-    var key = new ChatMessageKey(conversationId, Instant.now(), UUID.randomUUID());
+    var key = new ChatMessageKey(
+        conversationId,
+        Instant.now(),
+        clientMessageId != null ? clientMessageId : UUID.randomUUID()
+        );
 
     var message = ChatMessage.builder()
         .key(key)
