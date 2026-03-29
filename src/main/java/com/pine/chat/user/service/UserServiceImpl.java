@@ -7,6 +7,7 @@ import com.pine.chat.user.api.dto.CreateUserDto;
 import com.pine.chat.user.api.dto.UserDto;
 import com.pine.chat.user.repository.UserRepository;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,25 @@ public class UserServiceImpl implements UserService {
             user.getUsername(),
             user.getRole())
         );
+  }
+
+  @Override
+  public List<UserDto> findAllExcept(UUID excludeUserId) {
+    return userRepository.findByIdNot(excludeUserId)
+        .stream()
+        .map(u -> new UserDto(u.getId(), u.getUsername(), u.getRole()))
+        .toList();
+  }
+
+  @Override
+  public List<UserDto> searchByUsername(String query, UUID excludeUserId) {
+    if (query == null || query.isBlank()) {
+      return findAllExcept(excludeUserId);
+    }
+    return userRepository.searchByUsernameContaining(query.trim(), excludeUserId)
+        .stream()
+        .map(u -> new UserDto(u.getId(), u.getUsername(), u.getRole()))
+        .toList();
   }
 
 
